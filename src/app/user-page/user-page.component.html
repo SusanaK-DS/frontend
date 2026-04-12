@@ -1,0 +1,84 @@
+<section class="page">
+  <header class="header">
+    <h1>Users</h1>
+    <button type="button" class="btn primary" (click)="openCreate()" [disabled]="loading">Add user</button>
+  </header>
+
+  @if (error) {
+    <p class="banner error" role="alert">{{ error }}</p>
+  }
+
+  <div class="panel login-panel">
+    <h2>Login by email</h2>
+    <p class="hint">Looks up an existing user (same as API <code>login</code>).</p>
+    <div class="login-row">
+      <input
+        type="email"
+        name="loginEmail"
+        [(ngModel)]="loginEmail"
+        placeholder="Email"
+        autocomplete="email"
+      />
+      <button type="button" class="btn secondary" (click)="tryLogin()" [disabled]="loading">Go</button>
+    </div>
+    @if (loginMessage) {
+      <p class="banner info" role="status">{{ loginMessage }}</p>
+    }
+  </div>
+
+  @if (formVisible) {
+    <div class="panel">
+      <h2>{{ editingId === null ? 'New user' : 'Edit user' }}</h2>
+      <div class="field">
+        <label for="userName">Name</label>
+        <input id="userName" name="userName" [(ngModel)]="formName" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for="userEmail">Email</label>
+        <input id="userEmail" name="userEmail" type="email" [(ngModel)]="formEmail" autocomplete="email" />
+      </div>
+      <div class="actions">
+        <button type="button" class="btn primary" (click)="save()" [disabled]="loading">Save</button>
+        <button type="button" class="btn ghost" (click)="cancelForm()" [disabled]="loading">Cancel</button>
+      </div>
+    </div>
+  }
+
+  @if (loading && !formVisible) {
+    <p class="muted">Loading…</p>
+  }
+
+  <div class="table-wrap">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col" class="col-actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users; track user.id) {
+          <tr>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td class="col-actions">
+              <button type="button" class="btn small ghost" (click)="openEdit(user)" [disabled]="loading">
+                Edit
+              </button>
+              <button type="button" class="btn small danger" (click)="delete(user)" [disabled]="loading">
+                Delete
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          @if (!loading) {
+            <tr>
+              <td colspan="3" class="muted empty">No users yet. Add one to get started.</td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

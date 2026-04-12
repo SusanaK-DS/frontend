@@ -1,0 +1,10 @@
+<header class="app-bar">
+  <span class="brand">Library</span>
+  <nav class="nav">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Books</a>
+    <a routerLink="/users" routerLinkActive="active">Users</a>
+  </nav>
+</header>
+<main class="app-main">
+  <router-outlet />
+</main>
