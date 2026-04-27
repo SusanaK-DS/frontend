@@ -1,0 +1,72 @@
+<section class="page">
+  <header class="header">
+    <h1>Articles</h1>
+    <button type="button" class="btn primary" (click)="openCreate()" [disabled]="loading">
+      Add article
+    </button>
+  </header>
+
+  @if (error) {
+    <p class="banner error" role="alert">{{ error }}</p>
+  }
+
+  @if (formVisible) {
+    <div class="panel">
+      <h2>{{ editingId === null ? 'New article' : 'Edit article' }}</h2>
+      <div class="field">
+        <label for="title">Title</label>
+        <input id="title" name="title" [(ngModel)]="formTitle" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="author">Author</label>
+        <input id="author" name="author" [(ngModel)]="formAuthor" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="publishedDate">Published date</label>
+        <input id="publishedDate" name="publishedDate" type="date" [(ngModel)]="formPublishedDate" />
+      </div>
+      <div class="actions">
+        <button type="button" class="btn primary" (click)="save()" [disabled]="loading">Save</button>
+        <button type="button" class="btn ghost" (click)="cancelForm()" [disabled]="loading">Cancel</button>
+      </div>
+    </div>
+  }
+
+  @if (loading && !formVisible) {
+    <p class="muted">Loading…</p>
+  }
+
+  <div class="table-wrap">
+    <table class="articles-table">
+      <thead>
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Author</th>
+          <th scope="col" class="col-actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (article of articles; track article.id) {
+          <tr>
+            <td>{{ article.title }}</td>
+            <td>{{ article.author }}</td>
+            <td class="col-actions">
+              <button type="button" class="btn small ghost" (click)="openEdit(article)" [disabled]="loading">
+                Edit
+              </button>
+              <button type="button" class="btn small danger" (click)="delete(article)" [disabled]="loading">
+                Delete
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          @if (!loading) {
+            <tr>
+              <td colspan="3" class="muted empty">No articles yet. Add one to get started.</td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

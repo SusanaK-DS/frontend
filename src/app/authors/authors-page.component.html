@@ -1,0 +1,75 @@
+
+<section class="page">
+  <header class="header">
+    <h1>Authors</h1>
+    <button type="button" class="btn primary" (click)="openCreate()">
+      Add author
+    </button>
+  </header>
+
+  @if (error) {
+    <p class="banner error" role="alert">{{ error }}</p>
+  }
+
+  @if (formVisible) {
+    <div class="panel">
+      <h2>{{ editingId === null ? 'New author' : 'Edit author' }}</h2>
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" [(ngModel)]="formName" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" [(ngModel)]="formEmail" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="birthDate">Birth date</label>
+        <input id="birthDate" name="birthDate" type="date" [(ngModel)]="formBirthDate" />
+      </div>
+      <div class="actions">
+        <button type="button" class="btn primary" (click)="save()" [disabled]="loading">Save</button>
+        <button type="button" class="btn ghost" (click)="cancelForm()" [disabled]="loading">Cancel</button>
+      </div>
+    </div>
+  }
+
+  @if (loading && !formVisible) {
+    <p class="muted">Loading…</p>
+  }
+
+  <div class="table-wrap">
+    <table class="authors-table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Birth date</th>
+          <th scope="col" class="col-actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (author of authors; track author.id) {
+          <tr>
+            <td>{{ author.name }}</td>
+            <td>{{ author.email }}</td>
+            <td>{{ author.birthDate | date: 'yyyy-MM-dd' }}</td>
+            <td class="col-actions">
+              <button type="button" class="btn small ghost" (click)="openEdit(author)" [disabled]="loading">
+                Edit
+              </button>
+              <button type="button" class="btn small danger" (click)="delete(author)" [disabled]="loading">
+                Delete
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          @if (!loading) {
+            <tr>
+              <td colspan="4" class="muted empty">No authors yet. Add one to get started.</td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
